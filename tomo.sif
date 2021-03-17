@@ -1,0 +1,42 @@
+otstrap: docker
+From: ubuntu:20.04
+#From: nvcr.io/nvidia/tensorflow:20.08-tf2-py3
+
+
+%environment
+    PATH="/container/miniconda/bin:$PATH"
+
+%post
+    mkdir -p /container
+
+    #install libs and update system libraries
+    apt-get update \
+      && apt-get install -y wget tar git \
+      && rm -rf /var/lib/apt/lists/*
+
+
+    #install conda
+    wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
+    bash Miniconda3-latest-Linux-x86_64.sh -b -p /container/miniconda && rm Miniconda3-latest-Linux-x86_64.sh
+
+    # keep conda in user dir, so can do conda install
+    export PATH="/container:/container/miniconda/bin:$PATH"
+
+    conda config --set always_yes yes --set changeps1 no --set auto_update_conda yes
+    conda install conda-build anaconda-client \
+      && conda update conda 
+
+    cd container
+
+    pip install funcx
+    pip install funcx-endpoint 
+
+    conda install -c conda-forge dxchange
+    conda install -c conda-forge tomopy
+
+    git clone https://github.com/tomography/tomopy-cli
+
+    cd tomopy-cli
+    python setup.py install
+    cd ..
+
