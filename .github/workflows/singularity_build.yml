@@ -41,19 +41,19 @@ jobs:
         # make -C builddir
         # sudo make -C builddir install          
 
-    - name: Check out code for the container build
-      uses: actions/checkout@v1
+    # - name: Check out code for the container build
+    #   uses: actions/checkout@v1
 
-    - name: Build Container
-      env:
-        SINGULARITY_RECIPE: dials_v1.sif
-        OUTPUT_CONTAINER: dials_v1.simg
-      run: |
-       ls 
-       if [ -f "${SINGULARITY_RECIPE}" ]; then
-            sudo -E singularity build ${OUTPUT_CONTAINER} ${SINGULARITY_RECIPE}
-       else
-           echo "${SINGULARITY_RECIPE} is not found."
-           echo "Present working directory: $PWD"
-           ls
-       fi
+    # - name: Build Container
+    #   env:
+    #     SINGULARITY_RECIPE: dials_v1.sif
+    #     OUTPUT_CONTAINER: dials_v1.simg
+    #   run: |
+    #    ls 
+    #    if [ -f "${SINGULARITY_RECIPE}" ]; then
+    #         sudo -E singularity build ${OUTPUT_CONTAINER} ${SINGULARITY_RECIPE}
+    #    else
+    #        echo "${SINGULARITY_RECIPE} is not found."
+    #        echo "Present working directory: $PWD"
+    #        ls
+    #    fi
