@@ -28,7 +28,7 @@ From: ubuntu:20.04
     tar -xJf dials-v1-14-13-linux-x86_64.tar.xz
     
     cd dials-installer
-    python bin/install.py --base_dir /container/dials_v1
+    python bin/install.py
     cd ..
     
     rm dials-v1-14-13-linux-x86_64.tar.xz
