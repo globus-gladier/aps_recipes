@@ -2,32 +2,26 @@
 # Version: beta
 # Description: Container for tomographic reconstruction using tomocupy
 # Maintainer: Gladier APS Team <gladier@globus-aps.org>
-# Base Image: docker.io/continuumio/miniconda3:latest
+# Base Image: condaforge/mambaforge:latest
 # Last Updated: 2024-03-19
 
-# Use the fully qualified Miniconda3 image from Docker Hub.
-FROM docker.io/continuumio/miniconda3:latest
+# Use Miniforge as recommended in the documentation
+FROM condaforge/mambaforge:latest
 
-# Set environment variables
-ENV PYTHONUNBUFFERED=1 \
-    PYTHONDONTWRITEBYTECODE=1 \
-    CONDA_ENV=base
-
-# Install system build dependencies
-RUN apt-get update && \
-    apt-get install -y \
-        build-essential \
-        libssl-dev \
-        libffi-dev && \
-    apt-get clean && rm -rf /var/lib/apt/lists/*
-
-# Install Python 3.11 and required packages from conda-forge
-RUN conda install -y -c conda-forge \
-        python=3.11 \
-        tomocupy \
-        dxchange \
-        matplotlib && \
-    conda clean -afy
+# Install Python and required packages from conda-forge
+RUN mamba install -y -c conda-forge \
+        python=3.10 \
+        cupy \
+        scikit-build \
+        swig \
+        numexpr \
+        opencv \
+        tifffile \
+        h5py \
+        cmake \
+        pywavelets \
+        tomocupy && \
+    mamba clean -afy
 
 # Install globus-compute-endpoint via pip
 RUN pip install --no-cache-dir globus-compute-endpoint
