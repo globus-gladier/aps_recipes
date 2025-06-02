@@ -9,15 +9,21 @@
 FROM docker.io/continuumio/miniconda3:latest
 
 # Install system build dependencies required by some pip packages.
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    libssl-dev \
-    libffi-dev && \
-    rm -rf /var/lib/apt/lists/*
+RUN apt-get update && \
+    apt-get install -y \
+        build-essential \
+        libssl-dev \
+        libffi-dev && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* \
 
 # Install Python 3.11, pytorch, and matplotlib from conda-forge.
-RUN conda install -y -c conda-forge python=3.11 pytorch libmagic matplotlib && \
-    conda clean -afy
+RUN conda install -y -c conda-forge \
+        python=3.11 \
+        pytorch \
+        libmagic \
+        matplotlib && \
+    conda clean -afy \
 
 # Upgrade pip and build tools.
 RUN pip install --upgrade pip setuptools wheel

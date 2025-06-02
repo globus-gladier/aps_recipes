@@ -17,16 +17,19 @@ LABEL description="GSAS2 container for crystallographic analysis"
 RUN mkdir -p /container
 
 # Install system dependencies
-RUN apt-get update && apt-get install -y \
-    wget \
-    tar \
-    build-essential \
-    libgtk-3-dev \
-    libgfortran4 \
-    && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && \
+    apt-get install -y \
+        wget \
+        tar \
+        build-essential \
+        libgtk-3-dev \
+        libgfortran4 && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 # Install GSAS2 and dependencies
-RUN conda install -y gsas2pkg -c defaults -c conda-forge -c briantoby
+RUN conda install -y gsas2pkg -c defaults -c conda-forge -c briantoby && \
+    conda clean -afy
 
 # Install globus-compute-sdk via pip
 RUN pip install --no-cache-dir globus-compute-sdk

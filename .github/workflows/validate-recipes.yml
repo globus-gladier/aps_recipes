@@ -34,7 +34,12 @@ jobs:
 
       - name: Run pre-commit on all files
         run: |
-          pre-commit run --all-files
+          echo "Running pre-commit validation..."
+          pre-commit run --all-files || {
+            echo "::error::Recipe validation failed. Please check the errors above and fix them."
+            exit 1
+          }
+          echo "Recipe validation passed!"
 
       - name: Install Podman
         run: |
@@ -49,6 +54,7 @@ jobs:
 
       - name: Build and test all containers
         run: |
+          echo "Building and testing containers..."
           # Find all recipe files
           for recipe in recipes/*.recipe; do
             # Get container name and version from recipe path
@@ -57,7 +63,10 @@ jobs:
 
             # Build container
             echo "Building $name:$version..."
-            podman build -f "$recipe" -t "$name:$version"
+            podman build -f "$recipe" -t "$name:$version" || {
+              echo "::error::Failed to build $name:$version"
+              exit 1
+            }
 
             # Run tests if they exist
             test_file="tests/$name-$version.yaml"
@@ -65,6 +74,12 @@ jobs:
               echo "Testing $name:$version..."
               container-structure-test test \
                 --image "$name:$version" \
-                --config "$test_file"
+                --config "$test_file" || {
+                  echo "::error::Tests failed for $name:$version"
+                  exit 1
+                }
+            else
+              echo "No tests found for $name:$version"
             fi
           done
+          echo "All containers built and tested successfully!"

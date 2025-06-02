@@ -13,10 +13,10 @@ ENV PATH="/dials/conda_base/bin:$PATH"
 # Install required packages
 RUN source /dials/dials && \
     pip install numpy matplotlib && \
-    conda init
+    conda init && \
+    conda clean -afy
 
 RUN echo "source /dials/dials" >> ~/.bashrc
-
 
 # Install globus-compute-sdk via pip
 RUN pip install --no-cache-dir globus-compute-sdk

@@ -15,15 +15,16 @@ ENV PATH="/container/miniconda/bin:$PATH" \
 # Install system dependencies
 RUN apt-get update && \
     apt-get install -y \
-    wget \
-    git \
-    build-essential \
-    cmake \
-    make \
-    libeigen3-dev \
-    libhdf5-dev \
-    libgflags-dev \
-    libspdlog-dev && \
+        wget \
+        git \
+        build-essential \
+        cmake \
+        make \
+        libeigen3-dev \
+        libhdf5-dev \
+        libgflags-dev \
+        libspdlog-dev && \
+    apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
     rm -rf Music/ Public/ Videos/ Templates/ Pictures/ Documents/ examples.desktop
 
@@ -38,12 +39,12 @@ RUN mkdir build && \
     cmake ../ && \
     make -j
 
-
 # Configure conda and install Python packages
 RUN conda config --set always_yes yes --set changeps1 no --set auto_update_conda yes && \
     conda install -y conda-build anaconda-client && \
     conda update -y conda && \
     conda install -y numpy h5py pip && \
+    conda clean -afy
 
 # Create symbolic links
 RUN ln -s /container/xpcs-eigen/build/corr /corr && \

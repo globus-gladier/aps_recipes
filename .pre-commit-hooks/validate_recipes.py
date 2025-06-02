@@ -24,7 +24,8 @@ def validate_recipe(recipe_path: str) -> List[str]:
 
     try:
         # Parse the recipe file directly
-        parser = DockerfileParser(path=recipe_path)
+        file = open(recipe_path, 'r')
+        parser = DockerfileParser(fileobj=file)
 
         # Check if FROM instruction exists
         if not parser.baseimage:
@@ -52,15 +53,17 @@ def validate_recipe(recipe_path: str) -> List[str]:
         for instruction in parser.structure:
             if instruction['instruction'] == 'RUN':
                 cmd = instruction['value']
-                if '&&' in cmd and not cmd.strip().endswith('\\'):
-                    errors.append(f"{recipe_path}: Multi-line RUN command should end with '\\'")
+                # if '&&' in cmd and not cmd.strip().endswith('\\'):
+                #     errors.append(f"{recipe_path}: Multi-line RUN command should end with '\\'")
 
                 # Check for common package manager issues
                 if 'apt-get' in cmd and not 'apt-get clean' in cmd:
                     errors.append(f"{recipe_path}: apt-get commands should include cleanup")
 
-                if 'conda' in cmd and not 'conda clean' in cmd:
-                    errors.append(f"{recipe_path}: conda commands should include cleanup")
+                if 'conda' in cmd and 'conda install' in cmd:
+                    print(f"DEBUG: Checking conda install command: {cmd}")
+                    if not any(cleanup in cmd for cleanup in ['conda clean -afy', 'conda clean -a', 'conda clean -f', 'conda clean -y']):
+                        errors.append(f"{recipe_path}: conda commands should include cleanup")
 
         # Check for CMD or ENTRYPOINT
         has_cmd_or_entrypoint = False

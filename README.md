@@ -13,11 +13,15 @@ This repository contains container recipe files for building containers used in 
 .
 ├── recipes/              # Container recipe files
 │   ├── boost_corr-1.0.0.recipe
-│   ├── tomopy-1.0.0.recipe
+│   ├── boost_corr-cuda-1.0.0.recipe
+│   ├── dials-1.0.0.recipe
+│   ├── eigen-1.0.0.recipe
 │   ├── gsas2-1.0.0.recipe
-│   ├── ssx-1.0.0.recipe
+│   ├── midas-beta.recipe
 │   ├── nx_refine-1.0.0.recipe
-│   └── eigen-1.0.0.recipe
+│   ├── tomocupy-beta.recipe
+│   ├── tomopy-1.0.0.recipe
+│   └── xrf_maps-beta.recipe
 ├── tests/               # Container test configurations
 ├── scripts/             # Utility scripts
 └── .github/            # GitHub Actions workflows
@@ -30,19 +34,29 @@ This repository contains container recipe files for building containers used in 
   - Includes: boost correlation analysis tools
   - Environment: Python 3.11 with scientific computing stack
 
-- **Tomopy** (`recipes/tomopy-1.0.0.recipe`)
+- **Boost Correlation CUDA** (`recipes/boost_corr-cuda-1.0.0.recipe`)
+  - Based on: nvidia/cuda:12.8.0-runtime-ubuntu24.04
+  - Includes: boost correlation analysis tools with CUDA support
+  - Environment: Python 3.11 with CUDA and PyTorch
+
+- **DIALS** (`recipes/dials-1.0.0.recipe`)
   - Based on: miniconda-base
-  - Includes: tomopy and related dependencies
-  - Environment: Python 3.11 with scientific computing stack
+  - Includes: DIALS for X-ray diffraction data analysis
+  - Environment: Python 3.11 with crystallography tools
+
+- **XPCS-Eigen** (`recipes/eigen-1.0.0.recipe`)
+  - Based on: miniconda-base
+  - Includes: xpcs-eigen, numpy, h5py
+  - Environment: Python 3.11 with C++ development tools
 
 - **GSAS2** (`recipes/gsas2-1.0.0.recipe`)
   - Based on: miniconda-base
   - Includes: GSAS2 and crystallographic analysis tools
   - Environment: Python 3.11 with scientific computing stack
 
-- **SSX** (`recipes/ssx-1.0.0.recipe`)
+- **MIDAS** (`recipes/midas-beta.recipe`)
   - Based on: miniconda-base
-  - Includes: funcx, funcx-endpoint, numpy, matplotlib
+  - Includes: MIDAS data processing tools
   - Environment: Python 3.11 with scientific computing stack
 
 - **NX Refine** (`recipes/nx_refine-1.0.0.recipe`)
@@ -50,10 +64,20 @@ This repository contains container recipe files for building containers used in 
   - Includes: nxrefine and related dependencies
   - Environment: Python 3.11 with scientific computing stack
 
-- **XPCS-Eigen** (`recipes/eigen-1.0.0.recipe`)
+- **TomoCuPy** (`recipes/tomocupy-beta.recipe`)
   - Based on: miniconda-base
-  - Includes: xpcs-eigen, numpy, h5py
-  - Environment: Python 3.11 with C++ development tools
+  - Includes: tomocupy and related dependencies
+  - Environment: Python 3.11 with scientific computing stack
+
+- **Tomopy** (`recipes/tomopy-1.0.0.recipe`)
+  - Based on: miniconda-base
+  - Includes: tomopy and related dependencies
+  - Environment: Python 3.11 with scientific computing stack
+
+- **XRF Maps** (`recipes/xrf_maps-beta.recipe`)
+  - Based on: miniconda-base
+  - Includes: XRF maps processing tools
+  - Environment: Python 3.11 with scientific computing stack
 
 ## Building Containers
 
@@ -106,6 +130,22 @@ podman pull ghcr.io/globus-gladier/aps_recipes/boost_corr:1.0.0
    ```bash
    pre-commit install
    ```
+
+### Recipe Validation
+
+The repository includes pre-commit hooks that validate recipe files for best practices:
+
+- Base image must use a fully qualified name (e.g., `docker.io/...`)
+- `apt-get` commands must include cleanup (`apt-get clean`)
+- `conda install` commands must include cleanup (`conda clean -afy`)
+- `pip install` commands must use `--no-cache-dir` flag
+- Each container must have a `CMD` or `ENTRYPOINT` set to `/bin/bash`
+- Each container must include `globus-compute-sdk` installation
+
+To run validation manually:
+```bash
+pre-commit run --all
+```
 
 ### Testing
 
