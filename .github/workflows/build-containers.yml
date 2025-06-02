@@ -41,4 +41,6 @@ jobs:
             version=$(basename "$recipe" .recipe | cut -d'-' -f2)
             podman tag "$name:$version" "ghcr.io/globus-gladier/aps_recipes/$name:$version"
             podman push "ghcr.io/globus-gladier/aps_recipes/$name:$version"
+            podman tag "$name:$version" "ghcr.io/globus-gladier/aps_recipes/$name:latest"
+            podman push "ghcr.io/globus-gladier/aps_recipes/$name:latest"
           done
