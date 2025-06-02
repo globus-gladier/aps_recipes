@@ -37,8 +37,8 @@ RUN apt-get update && \
     ./build.sh && \
     pip install -r requirements.txt
 
-# Install globus-compute-sdk via pip
-RUN pip install --no-cache-dir globus-compute-sdk
+# Install globus-compute-endpoint via pip
+RUN pip install --no-cache-dir globus-compute-endpoint
 
 # Default command: launch a bash terminal.
 CMD ["/bin/bash"]

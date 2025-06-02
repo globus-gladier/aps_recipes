@@ -35,19 +35,19 @@ def validate_recipe(recipe_path: str) -> List[str]:
         if parser.baseimage and not parser.baseimage.startswith(('docker.io/', 'ghcr.io/', 'quay.io/')):
             errors.append(f"{recipe_path}: Base image should use fully qualified name (e.g., docker.io/...)")
 
-        # Check for globus-compute-sdk installation
+        # Check for globus-compute-endpoint installation
         globus_compute_installed = False
         for instruction in parser.structure:
             if instruction['instruction'] == 'RUN':
                 cmd = instruction['value']
-                if 'pip install' in cmd and 'globus-compute-sdk' in cmd:
+                if 'pip install' in cmd and 'globus-compute-endpoint' in cmd:
                     globus_compute_installed = True
                     # Check for --no-cache-dir flag
                     if '--no-cache-dir' not in cmd:
                         errors.append(f"{recipe_path}: pip install should use --no-cache-dir flag")
 
         if not globus_compute_installed:
-            errors.append(f"{recipe_path}: Missing globus-compute-sdk installation")
+            errors.append(f"{recipe_path}: Missing globus-compute-endpoint installation")
 
         # Check for common issues in RUN instructions
         for instruction in parser.structure:

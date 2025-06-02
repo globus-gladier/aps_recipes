@@ -29,8 +29,8 @@ RUN conda install -y -c conda-forge python=3.11 pytorch cudatoolkit && \
 # Install boost_corr package in editable mode from the nexus-support branch.
 RUN pip install -e "git+https://github.com/AZjk/boost_corr@nexus-support#egg=boost_corr"
 
-# Install globus-compute-sdk via pip
-RUN pip install --no-cache-dir globus-compute-sdk
+# Install globus-compute-endpoint via pip
+RUN pip install --no-cache-dir globus-compute-endpoint
 
 # Default command: launch a bash terminal.
 CMD ["/bin/bash"]

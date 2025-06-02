@@ -139,7 +139,7 @@ The repository includes pre-commit hooks that validate recipe files for best pra
 - `conda install` commands must include cleanup (`conda clean -afy`)
 - `pip install` commands must use `--no-cache-dir` flag
 - Each container must have a `CMD` or `ENTRYPOINT` set to `/bin/bash`
-- Each container must include `globus-compute-sdk` installation
+- Each container must include `globus-compute-endpoint` installation
 
 To run validation manually:
 ```bash
