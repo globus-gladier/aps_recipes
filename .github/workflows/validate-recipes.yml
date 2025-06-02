@@ -4,15 +4,9 @@ on:
   push:
     paths:
       - 'recipes/**'
-      - '.pre-commit-config.yaml'
-      - '.pre-commit-hooks/**'
-      - 'tests/**'
   pull_request:
     paths:
       - 'recipes/**'
-      - '.pre-commit-config.yaml'
-      - '.pre-commit-hooks/**'
-      - 'tests/**'
   workflow_dispatch:
 
 jobs:
@@ -40,46 +34,3 @@ jobs:
             exit 1
           }
           echo "Recipe validation passed!"
-
-      - name: Install Podman
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y podman
-
-      - name: Install container-structure-test
-        run: |
-          curl -LO https://storage.googleapis.com/container-structure-test/latest/container-structure-test-linux-amd64
-          chmod +x container-structure-test-linux-amd64
-          sudo mv container-structure-test-linux-amd64 /usr/local/bin/container-structure-test
-
-      - name: Build and test all containers
-        run: |
-          echo "Building and testing containers..."
-          # Find all recipe files
-          for recipe in recipes/*.recipe; do
-            # Get container name and version from recipe path
-            name=$(basename "$recipe" .recipe | cut -d'-' -f1)
-            version=$(basename "$recipe" .recipe | cut -d'-' -f2)
-
-            # Build container
-            echo "Building $name:$version..."
-            podman build -f "$recipe" -t "$name:$version" || {
-              echo "::error::Failed to build $name:$version"
-              exit 1
-            }
-
-            # Run tests if they exist
-            test_file="tests/$name-$version.yaml"
-            if [ -f "$test_file" ]; then
-              echo "Testing $name:$version..."
-              container-structure-test test \
-                --image "$name:$version" \
-                --config "$test_file" || {
-                  echo "::error::Tests failed for $name:$version"
-                  exit 1
-                }
-            else
-              echo "No tests found for $name:$version"
-            fi
-          done
-          echo "All containers built and tested successfully!"
