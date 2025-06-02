@@ -2,11 +2,11 @@
 # Version: beta
 # Description: Container for tomographic reconstruction using tomocupy
 # Maintainer: Gladier APS Team <gladier@globus-aps.org>
-# Base Image: condaforge/mambaforge:latest
+# Base Image: docker.io/condaforge/mambaforge:latest
 # Last Updated: 2024-03-19
 
 # Use Miniforge as recommended in the documentation
-FROM condaforge/mambaforge:latest
+FROM docker.io/condaforge/mambaforge:latest
 
 # Install Python and required packages from conda-forge
 RUN mamba install -y -c conda-forge \

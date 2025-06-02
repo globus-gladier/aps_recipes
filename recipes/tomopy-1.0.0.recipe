@@ -2,14 +2,14 @@
 # Version: 1.0.0
 # Description: Container for tomographic reconstruction using tomopy
 # Maintainer: Gladier APS Team <gladier@globus-aps.org>
-# Base Image: docker.io/continuumio/miniconda3:latest
-# Last Updated: 2025-06-02
+# Base Image: docker.io/condaforge/mambaforge:latest
+# Last Updated: 2024-03-19
 
-# Use the fully qualified Miniconda3 image from Docker Hub.
-FROM docker.io/continuumio/miniconda3:latest
+# Use Miniforge as recommended in the documentation
+FROM docker.io/condaforge/mambaforge:latest
 
-# Install Python 3.11 and required packages from conda-forge
-RUN conda install -y -c conda-forge \
+# Install Python and required packages from conda-forge
+RUN mamba install -y -c conda-forge \
     python=3.11 \
     tomopy \
     dxchange \
