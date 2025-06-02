@@ -25,9 +25,6 @@ RUN conda install -y -c conda-forge \
         matplotlib && \
     conda clean -afy \
 
-# Upgrade pip and build tools.
-RUN pip install --upgrade pip setuptools wheel
-
 # Install boost_corr package in editable mode.
 RUN pip install -e git+https://github.com/AZjk/boost_corr#egg=boost_corr
 
