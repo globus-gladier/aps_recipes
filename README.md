@@ -22,7 +22,6 @@ This repository contains container recipe files for building containers used in 
 │   ├── tomocupy-beta.recipe
 │   ├── tomopy-1.0.0.recipe
 │   └── xrf_maps-beta.recipe
-├── tests/               # Container test configurations
 ├── scripts/             # Utility scripts
 └── .github/            # GitHub Actions workflows
 ```
@@ -145,26 +144,6 @@ The repository includes pre-commit hooks that validate recipe files for best pra
 To run validation manually:
 ```bash
 pre-commit run --all
-```
-
-### Testing
-
-Each container has associated tests in the `tests/` directory. To run tests:
-
-```bash
-# Test a specific container
-container-structure-test test \
-  --image <container-name>:<version> \
-  --config tests/<container-name>-<version>.yaml
-
-# Test all containers
-for recipe in recipes/*.recipe; do
-    name=$(basename "$recipe" .recipe | cut -d'-' -f1)
-    version=$(basename "$recipe" .recipe | cut -d'-' -f2)
-    container-structure-test test \
-      --image "$name:$version" \
-      --config "tests/$name-$version.yaml"
-done
 ```
 
 ## Building and Publishing via GitHub Actions

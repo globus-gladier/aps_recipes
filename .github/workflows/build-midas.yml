@@ -1,0 +1,40 @@
+name: Build MIDAS Container
+
+on:
+  push:
+    paths:
+      - 'recipes/midas-beta.recipe'
+      - '.github/workflows/build-midas.yml'
+  pull_request:
+    paths:
+      - 'recipes/midas-beta.recipe'
+      - '.github/workflows/build-midas.yml'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Podman
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y podman
+
+      - name: Build container
+        run: |
+          podman build -f recipes/midas-beta.recipe -t midas:beta
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Push container
+        run: |
+          podman tag midas:beta ghcr.io/globus-gladier/aps_recipes/midas:beta
+          podman push ghcr.io/globus-gladier/aps_recipes/midas:beta 

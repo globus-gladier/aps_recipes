@@ -4,20 +4,37 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-ssx:
-    uses: ./.github/workflows/build-ssx.yml
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-  build-nx-refine:
-    uses: ./.github/workflows/build-nx-refine.yml
+      - name: Install Podman
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y podman
 
-  build-boost-corr:
-    uses: ./.github/workflows/build-boost-corr.yml
+      - name: Build containers
+        run: |
+          for recipe in recipes/*.recipe; do
+            name=$(basename "$recipe" .recipe | cut -d'-' -f1)
+            version=$(basename "$recipe" .recipe | cut -d'-' -f2)
+            podman build -f "$recipe" -t "$name:$version"
+          done
 
-  build-tomopy:
-    uses: ./.github/workflows/build-tomopy.yml
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
-  build-gsas2:
-    uses: ./.github/workflows/build-gsas2.yml
-
-  build-eigen:
-    uses: ./.github/workflows/build-eigen.yml
+      - name: Push containers
+        run: |
+          for recipe in recipes/*.recipe; do
+            name=$(basename "$recipe" .recipe | cut -d'-' -f1)
+            version=$(basename "$recipe" .recipe | cut -d'-' -f2)
+            podman tag "$name:$version" "ghcr.io/globus-gladier/aps_recipes/$name:$version"
+            podman push "ghcr.io/globus-gladier/aps_recipes/$name:$version"
+          done
