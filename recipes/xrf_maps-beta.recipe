@@ -1,0 +1,36 @@
+# Name: xrf_maps
+# Version: beta
+# Description: Container for XRF maps processing
+# Maintainer: Gladier APS Team <gladier@globus-aps.org>
+# Base Image: docker.io/continuumio/miniconda3:latest
+# Last Updated: 2024-03-19
+
+# Use the fully qualified Miniconda3 image from Docker Hub.
+FROM docker.io/continuumio/miniconda3:latest
+
+# Set environment variables
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    CONDA_ENV=base
+
+# Install system build dependencies
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    libssl-dev \
+    libffi-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+
+# Install Python 3.11 and required packages from conda-forge
+RUN conda install -y -c conda-forge \
+    python=3.11 \
+    tomopy \
+    dxchange \
+    matplotlib \
+    && conda clean -afy
+
+# Install globus-compute-sdk via pip
+RUN pip install --no-cache-dir globus-compute-sdk
+
+# Default command: launch a bash terminal.
+CMD ["/bin/bash"]

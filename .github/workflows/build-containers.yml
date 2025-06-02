@@ -1,0 +1,23 @@
+name: Build and Publish All Containers
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-ssx:
+    uses: ./.github/workflows/build-ssx.yml
+
+  build-nx-refine:
+    uses: ./.github/workflows/build-nx-refine.yml
+
+  build-boost-corr:
+    uses: ./.github/workflows/build-boost-corr.yml
+
+  build-tomopy:
+    uses: ./.github/workflows/build-tomopy.yml
+
+  build-gsas2:
+    uses: ./.github/workflows/build-gsas2.yml
+
+  build-eigen:
+    uses: ./.github/workflows/build-eigen.yml

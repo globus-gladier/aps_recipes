@@ -1,0 +1,35 @@
+# Name: gsas2
+# Version: 1.0.0
+# Description: Container for GSAS2 crystallographic analysis
+# Maintainer: Gladier APS Team <gladier@globus-aps.org>
+# Base Image: docker.io/continuumio/miniconda3:latest
+# Last Updated: 2024-03-19
+
+# Use the fully qualified Miniconda3 image from Docker Hub.
+FROM docker.io/continuumio/miniconda3:latest
+
+LABEL maintainer="APS Recipes Team"
+LABEL version="1.0"
+LABEL description="GSAS2 container for crystallographic analysis"
+
+
+# Create container directory
+RUN mkdir -p /container
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    wget \
+    tar \
+    build-essential \
+    libgtk-3-dev \
+    libgfortran4 \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install GSAS2 and dependencies
+RUN conda install -y gsas2pkg -c defaults -c conda-forge -c briantoby
+
+# Install globus-compute-sdk via pip
+RUN pip install --no-cache-dir globus-compute-sdk
+
+# Default command: launch a bash terminal.
+CMD ["/bin/bash"]
