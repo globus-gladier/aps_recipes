@@ -6,6 +6,7 @@ RUN apt-get update && apt-get install -y \
     build-essential \
     libssl-dev \
     libffi-dev && \
+    apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
 # Install Python 3.11, tomopy, dxchange, and matplotlib from conda-forge.
@@ -21,8 +22,8 @@ RUN pip install --no-cache-dir globus-compute-endpoint
 # Install boost_corr package in editable mode.
 RUN pip install -e git+https://github.com/AZjk/boost_corr#egg=boost_corr
 
-# Default command: launch an interactive Python shell.
-CMD ["python3"]
+# Default command: launch bash shell.
+CMD ["/bin/bash"]
 
 # # Use the fully qualified CUDA image from Docker Hub.
 # FROM docker.io/nvidia/cuda:12.8.0-runtime-ubuntu24.04
