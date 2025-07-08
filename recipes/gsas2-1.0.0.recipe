@@ -1,12 +1,15 @@
 # Name: gsas2
 # Version: 1.0.0
-# Description: Container for GSAS2 crystallographic analysis
+# Description: Container for GSAS-II crystallography software
 # Maintainer: Gladier APS Team <gladier@globus-aps.org>
 # Base Image: docker.io/continuumio/miniconda3:latest
 # Last Updated: 2024-03-19
 
 # Use the fully qualified Miniconda3 image from Docker Hub.
 FROM docker.io/continuumio/miniconda3:latest
+
+# Add metadata labels
+LABEL org.opencontainers.image.source="https://github.com/globus-gladier/aps_recipes"
 
 LABEL maintainer="APS Recipes Team"
 LABEL version="1.0"

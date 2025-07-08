@@ -7,6 +7,9 @@
 
 FROM docker.io/dials/dials:latest
 
+# Add metadata labels
+LABEL org.opencontainers.image.source="https://github.com/globus-gladier/aps_recipes"
+
 # Set environment variables
 ENV PATH="/dials/conda_base/bin:$PATH"
 

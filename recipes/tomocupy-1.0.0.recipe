@@ -1,13 +1,17 @@
 # Name: tomocupy
-# Version: beta
-# Description: Container for tomographic reconstruction using tomocupy
+# Version: 1.0.0
+# Description: Container for TomoCuPy tomography software
 # Maintainer: Gladier APS Team <gladier@globus-aps.org>
-# Base Image: docker.io/condaforge/mambaforge:latest
+# Base Image: nvidia/cuda:11.8-devel-ubuntu20.04
 # Last Updated: 2024-03-19
 
-# Use Miniforge as recommended in the documentation
-FROM docker.io/condaforge/mambaforge:latest
+FROM nvidia/cuda:11.8-devel-ubuntu20.04
 
+# Add metadata labels
+LABEL org.opencontainers.image.source="https://github.com/globus-gladier/aps_recipes"
+
+# Set environment variables
+# Use Miniforge as recommended in the documentation
 # Install Python and required packages from conda-forge
 RUN mamba install -y -c conda-forge \
         python=3.11 \

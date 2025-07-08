@@ -1,14 +1,16 @@
 # Name: tomopy
 # Version: 1.0.0
-# Description: Container for tomographic reconstruction using tomopy
+# Description: Container for TomoPy tomography software
 # Maintainer: Gladier APS Team <gladier@globus-aps.org>
-# Base Image: docker.io/condaforge/mambaforge:latest
+# Base Image: docker.io/continuumio/miniconda3:latest
 # Last Updated: 2024-03-19
 
-# Use Miniforge as recommended in the documentation
-FROM docker.io/condaforge/mambaforge:latest
+FROM docker.io/continuumio/miniconda3:latest
 
-# Install Python and required packages from conda-forge
+# Add metadata labels
+LABEL org.opencontainers.image.source="https://github.com/globus-gladier/aps_recipes"
+
+# Install system dependencies
 RUN mamba install -y -c conda-forge \
     python=3.11 \
     tomopy \

@@ -2,11 +2,13 @@
 # Version: 1.0.0
 # Description: Container for boost correlation analysis with CUDA support
 # Maintainer: Gladier APS Team <gladier@globus-aps.org>
-# Base Image: docker.io/nvidia/cuda:12.8.0-runtime-ubuntu24.04
+# Base Image: nvidia/cuda:11.8-devel-ubuntu20.04
 # Last Updated: 2024-03-19
 
-# Use the fully qualified CUDA image from Docker Hub.
-FROM docker.io/nvidia/cuda:12.8.0-runtime-ubuntu24.04
+FROM nvidia/cuda:11.8-devel-ubuntu20.04
+
+# Add metadata labels
+LABEL org.opencontainers.image.source="https://github.com/globus-gladier/aps_recipes"
 
 # Install system dependencies needed for downloading and installing Miniconda.
 RUN apt-get update && \
