@@ -15,7 +15,7 @@ ENV PATH="/dials/conda_base/bin:$PATH"
 
 # Install required packages
 RUN source /dials/dials && \
-    pip install numpy matplotlib && \
+    pip install numpy matplotlib mpi4py && \
     conda init && \
     conda clean -afy
 
